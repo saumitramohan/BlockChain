@@ -1,14 +1,18 @@
 package BlockProject.BlockChain;
+import BlockProject.Transaction.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Blockchain {
 	public static ArrayList<Block> blockchain ;
 	public static int difficulty = 5;
+	public static HashMap<String,TransactionOutput> UTXOs ;
 
 	
 	public Blockchain() {
 		blockchain = new ArrayList<Block>();
+		UTXOs = new HashMap<String,TransactionOutput>(); //list of all unspent transactions.
 	}
 	
 	public static Boolean isChainValid() {

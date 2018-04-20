@@ -1,8 +1,10 @@
 package BlockProject.BlockChain;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import BlockProject.Cryptography.DigitalSignatureUtil;
+import BlockProject.Transaction.Transactions;
 
 public class Block {
 	// Digital signature of the current block
@@ -14,6 +16,9 @@ public class Block {
 	private long timeStamp; 
 	
 	private int nonce;
+	
+	public String merkleRoot;
+	public ArrayList<Transactions> transactions = new ArrayList<Transactions>(); //our data will be a simple message.
 
 	//Block Constructor.
 	public Block(String data,String previousHash ) {
@@ -43,5 +48,20 @@ public class Block {
 		}
 		System.out.println("Block Mined!!! : " + hash);
 	}
+	
+	//Add transactions to this block
+			public boolean addTransaction(Transactions transaction) {
+				//process transaction and check if valid, unless block is genesis block then ignore.
+				if(transaction == null) return false;		
+				if((previousHash != "0")) {
+					if((transaction.processTransaction() != true)) {
+						System.out.println("Transaction failed to process. Discarded.");
+						return false;
+					}
+				}
+				transactions.add(transaction);
+				System.out.println("Transaction Successfully added to Block");
+				return true;
+			}
 	
 }
