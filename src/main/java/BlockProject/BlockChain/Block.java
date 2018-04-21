@@ -29,6 +29,13 @@ public class Block {
 		this.hash = calculateHash();
 	}
 	
+	public Block(String previousHash ) {
+		this.previousHash = previousHash;
+		this.timeStamp = new Date().getTime();
+		
+		this.hash = calculateHash(); //Making sure we do this after we set the other values.
+	}
+	
 	public String calculateHash() {
 		// We want to calculate hash of all data involved
 		String calculatedhash = DigitalSignatureUtil.applyHash( 

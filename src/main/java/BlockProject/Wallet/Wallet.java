@@ -7,6 +7,7 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import BlockProject.BlockChain.Blockchain;
@@ -18,6 +19,8 @@ public class Wallet {
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
 	
+	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
+
 
 	public Wallet(){
 		generateKeyPair();	
@@ -45,12 +48,13 @@ public class Wallet {
 	        for (Map.Entry<String, TransactionOutput> item: Blockchain.UTXOs.entrySet()){
 	        	TransactionOutput UTXO = item.getValue();
 	            if(UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
-	            	Blockchain.UTXOs.put(UTXO.id,UTXO); //add it to our list of unspent transactions.
+	            	UTXOs.put(UTXO.id,UTXO); //add it to our list of unspent transactions.
 	            	total += UTXO.value ; 
 	            }
 	        }  
 			return total;
 		}
+		
 		//Generates and returns a new transaction from this wallet.
 		public Transactions sendFunds(PublicKey _recipient,float value ) {
 			if(getBalance() < value) { //gather balance and check funds.
@@ -61,7 +65,7 @@ public class Wallet {
 			ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 	    
 			float total = 0;
-			for (Map.Entry<String, TransactionOutput> item: Blockchain.UTXOs.entrySet()){
+			for (Map.Entry<String, TransactionOutput> item: UTXOs.entrySet()){
 				TransactionOutput UTXO = item.getValue();
 				total += UTXO.value;
 				inputs.add(new TransactionInput(UTXO.id));
@@ -72,7 +76,7 @@ public class Wallet {
 			newTransaction.generateSignature(privateKey);
 			
 			for(TransactionInput input: inputs){
-				Blockchain.UTXOs.remove(input.transactionOutputId);
+				UTXOs.remove(input.transactionOutputId);
 			}
 			return newTransaction;
 		}

@@ -52,7 +52,7 @@ public class Transactions {
 	//Returns true if new transaction could be created.	
 	public boolean processTransaction() {
 			
-			if(verifiySignature() == false) {
+			if(verifySignature() == false) {
 				System.out.println("#Transaction Signature failed to verify");
 				return false;
 			}

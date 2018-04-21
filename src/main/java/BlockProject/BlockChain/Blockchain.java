@@ -5,14 +5,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Blockchain {
-	public static ArrayList<Block> blockchain ;
+	public static float minimumTransaction = 0.1f;
+
+	public static ArrayList<Block> blockchain = blockchain = new ArrayList<Block>();
 	public static int difficulty = 5;
-	public static HashMap<String,TransactionOutput> UTXOs ;
+	public static HashMap<String,TransactionOutput> UTXOs = UTXOs = new HashMap<String,TransactionOutput>();
+	
+	
+	
 
 	
 	public Blockchain() {
-		blockchain = new ArrayList<Block>();
-		UTXOs = new HashMap<String,TransactionOutput>(); //list of all unspent transactions.
+		//blockchain = new ArrayList<Block>();
+		 //list of all unspent transactions.
 	}
 	
 	public static Boolean isChainValid() {
@@ -39,6 +44,7 @@ public class Blockchain {
 	
 	
 	public static void addBlock(Block newBlock) {
+		newBlock.mineBlock(difficulty);
 		blockchain.add(newBlock);
 	}
 }
